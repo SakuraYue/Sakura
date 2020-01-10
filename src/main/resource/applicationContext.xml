@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+	<!-- 加载redis配置文件 -->
+	<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:redis-pool.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!--定义Redis连接池配置信息-->
+	<bean id="poolConfig"  class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="${redis.maxIdle}"></property>
+		<property name="minIdle" value="${redis.minIdle}"></property>
+		<property name="maxTotal" value="${redis.maxTotal}"></property>
+		<property name="maxWaitMillis" value="${redis.maxWaitMillis}"></property>
+		<property name="testOnBorrow" value="${redis.testOnBorrow}"></property>
+	</bean>
+
+	<!--Redis连接工厂-->
+	<bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="hostName" value="${redis.host}"></property>
+		<property name="port" value="${redis.port}"></property>
+		<property name="password" value="${redis.password}"></property>
+		<property name="poolConfig" ref="poolConfig"></property>
+	</bean>
+
+	<!--声明RedisTemplate和配置序列化器-->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
+		  p:connection-factory-ref="connectionFactory" >
+		<!--对Redis各种类型数据进行序列化方式的选择-->
+		<property name="keySerializer">
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="valueSerializer">
+			<bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+		</property>
+		<property name="hashKeySerializer">
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="hashValueSerializer">
+			<bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+		</property>
+	</bean>
+
+
+
+	<!-- 1.配置数据源 ，使用的alibaba的数据源-->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<!-- 配置数据库连接信息 -->
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/ying?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+
+		<!-- 配置连接池初始化连接数大小、最小连接数、最大连接数 -->
+		<property name="initialSize" value="10"/>
+		<property name="minIdle" value="10"/>
+		<property name="maxActive" value="50"/>
+
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000"/>
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+
+		<!-- 配置监控统计拦截的filters -->
+		<property name="filters" value="wall,stat" />
+	</bean>
+
+	<!-- 2.配置MyBatis的会话工厂 -->
+	<bean id="sqlSessionFactory"
+		  class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
+		<!-- 注入数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 给包下面的JavaBean起别名，别名的作用:在映射文件中resultType和parameterType中不用类的全名了，直接用别名 -->
+		<!-- Car,car Car CaR-->
+		<property name="typeAliasesPackage" value="com.fh.*.model"></property>
+		<!-- 自动扫描MyBatis映射文件,省略掉SqlMapConfig.xml的mappers手工配置 -->
+		<property name="mapperLocations" value="classpath:/mapper/*.xml"></property>
+		<!-- 配置 Mybatis 配置文件（可无） -->
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<!-- 以上配置和传统 Mybatis 一致 -->
+		<!-- MP 全局配置注入 -->
+		<property name="globalConfig" ref="globalConfig" />
+		<property name="plugins">
+			<list>
+				<!-- 注册分页插件 -->
+				<bean class="com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="globalConfig" class="com.baomidou.mybatisplus.core.config.GlobalConfig">
+		<property name="dbConfig">
+			<bean class="com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig">
+				<!--
+                AUTO:数据库ID自增,
+                NONE:该类型为未设置主键类型(将跟随全局)
+                INPUT:用户输入ID
+                【以下3种类型、只有当插入对象ID 为空，才自动填充。】
+                ID_WORKER:全局唯一ID (idWorker)(雪花算法生成的64位的long类型的数值)
+                UUID:全局唯一ID (UUID)
+                ID_WORKER_STR:字符串全局唯一ID (idWorker 的字符串表示)
+                -->
+				<property name="idType" value="AUTO" />
+				<!-- 数据库类型配置 -->
+				<!-- 可选参数（默认mysql） MYSQL->`mysql` ORACLE->`oracle` DB2->`db2` H2->`h2`
+                   HSQL->`hsql` SQLITE->`sqlite` POSTGRE->`postgresql` SQLSERVER2005->`sqlserver2005`
+                   SQLSERVER->`sqlserver` -->
+				<property name="dbType" value="MYSQL" />
+				<!-- 全局表为下划线命名设置 true -->
+				<property name="tableUnderline" value="true" />
+				<!-- 表前缀 -->
+				<property name="tablePrefix" value="t_"/>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 3.配置Mapper代理对象 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- DAO接口所在包名，Spring会自动递归查找其下的类 ,自动扫描了所有的XxxxMapper.xml对应的mapper接口文件,只要Mapper接口类和Mapper映射文件对应起来就可以了-->
+		<property name="basePackage" value="com.fh.*.mapper" />
+		<!-- 注意事项：千万不要配置SqlSessionFactory，要配置sqlSessionFactoryBeanName -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+
+
+	<!--配置事务管理器-->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+
+	<!-- 5、开启组件的扫描 -->
+	<context:component-scan base-package="com.fh.*.service" />
+
+	<!-- 定义advice,配置传播特性、事务隔离级别、只读事务、回滚策略 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="update*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="change*" propagation="REQUIRED"
+			rollback-for="java.lang.Exception" />
+			<tx:method name="delete*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="batch*" propagation="REQUIRED"
+					   rollback-for="java.lang.Exception" />
+			<tx:method name="save*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="q*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 切点配置 execution(* com.fh.*.service.impl.*.*(..)) 第一个*：任意返回值 第二个*：包下任意的类
+		第三个*：类中的所有方法 (..)：任意参数 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.fh.*.service.*.*(..))"
+			id="servicePointcut" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="servicePointcut" />
+	</aop:config>
+
+</beans> 

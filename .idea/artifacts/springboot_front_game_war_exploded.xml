@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="springboot-front-game:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/springboot_front_game_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="springboot-front-game/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="springboot-front-game" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

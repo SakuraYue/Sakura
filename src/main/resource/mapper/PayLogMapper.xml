@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+	例如namespace="com.szh.mapper.personMapper"就是com.szh.mapper(包名)+personMapper(personMapper.xml文件去除后缀) -->
+<mapper namespace="com.fh.pay.mapper.PayLogMapper">
+
+    <insert id="addPayLog" parameterType="PayLog">
+        INSERT INTO t_pay_log (out_trade_no, order_id, member_id, pay_money, pay_status, pay_type)
+        VALUES
+        (#{outTradeNo}, #{orderId}, #{memberId},#{payMoney}, #{payStatus}, #{payType})
+    </insert>
+
+    <update id="updatePayLog" parameterType="PayLog">
+        update t_pay_log set pay_time = #{payTime},pay_status=#{payStatus},transaction_id = #{transactionId} where out_trade_no = #{outTradeNo}
+    </update>
+
+    <select id="getPayLogByOutTradeNo" parameterType="String" resultType="PayLog">
+        select * from t_pay_log where out_trade_no = #{abc}
+    </select>
+</mapper>
