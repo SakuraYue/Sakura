@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html class=" jd_retina">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的购物车 - 飞狐商城商城</title>
+    <link type="text/css" rel="stylesheet" href="css/cart2.css">
+    <link type="text/css" rel="stylesheet" href="css/cart.css">
+
+    <link rel="stylesheet" href="/js/bootstrap/css/bootstrap.min.css">
+    <link rel="icon" href="/js/shop/assets/img/favicon.ico">
+
+
+    <script src="/js/jquery-3.3.1.js"></script>
+    <script src="/js/common/nav3.js"></script>
+	<script>
+		$(function(){
+			$("#service").load("service.html");
+			$("#footer").load("footer.html");
+            initCart();
+		});
+	</script>
+</head>
+<body>
+<div id="navDiv"></div>
+<div class="w w1 header clearfix">
+    <div id="logo-2014">
+        <a href="http://www.itfh.com/" class="logo"></a>
+        <a href="https://cart.itfh.com/cart.action#none" class="link2"><b></b>购物车</a>
+    </div>
+    <div class="cart-search">
+        <div class="form">
+            <input id="key" type="text" class="itxt" autocomplete="off" accesskey="s" style="color: rgb(51, 51, 51);">
+            <input type="button" class="button" value="搜索" clstag="clickcart|keycount|xincart|cart_search"
+                   onclick="javascript:void(0);">
+        </div>
+    </div>
+</div>
+<!-- 分类购物车枚举 -->
+<!-- main -->
+<div id="container" class="cart" ecarddg="0" cartalwaysdg="0" t="0">
+    <div class="w">
+        <div id="chunjie" class="mb10"></div>
+        <div class="nologin-tip" id="nologinDiv" style="display: none">
+            <span class="wicon"></span>
+            您还没有登录！登录后将展示您购物车中的商品!
+            <a class="btn-1 ml10" href="login.html">立即登录</a>
+        </div>
+        <div class="nologin-tip" id="noCartItemDiv" style="display: none">
+            <span class="wicon"></span>
+            您的购物车中空空如也，抓紧时间去选购吧!
+            <a class="btn-1 ml10" href="index-2.html">立即选购</a>
+        </div>
+        <div class="cart-filter-bar" id="cartTotalCountDiv" style="display: none">
+            <ul class="switch-cart">
+                <li class="switch-cart-item curr">
+                    <a href="https://cart.itfh.com/cart.action">
+                        <em>全部商品</em>
+                        <span class="number">0</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="clr"></div>
+            <div class="w-line">
+                <div class="floater" style="width: 78px; left: 0px;"></div>
+            </div>
+            <div class="tab-con ui-switchable-panel-selected" style="display: block;"></div>
+            <div class="tab-con hide" style="display: none;"></div>
+        </div>
+    </div>
+    <div class="cart-warp" id="cartDiv" ><!--style="display: none"-->
+        <div class="w">
+            <div id="jd-cart">
+                <div class="cart-main cart-main-new">
+                    <div class="cart-thead">
+                        <!-- 我的冰箱 -->
+                        <div class="column t-checkbox">
+                            <div class="cart-checkbox">
+                                <input type="checkbox" id="checkAll" name="toggle-checkboxes"
+                                       class="jdcheckbox checkAll" onclick="checkAll(this)">
+                                <label class="checked" for="">勾选全部商品</label>
+                            </div>
+                            全选
+                        </div>
+                        <div class="column t-goods">商品</div>
+                        <div class="column t-price">单价</div>
+                        <div class="column t-quantity">数量</div>
+                        <div class="column t-sum">小计</div>
+                        <div class="column t-action">操作</div>
+                    </div>
+                    <div id="cart-list">
+                        <!-- 需要引用的全局信息 -->
+                        <div class="cart-item-list" id="cart-item-list-01">
+                            <div class="cart-tbody" id="vender_8888">
+
+                                <div class="item-list">
+                                    <!-- 满赠 -->
+                                    <!-- 满赠 -->
+                                    <div class="item-give item-full " id="cartItemList"
+                                         style="z-index: auto;">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="isSsgdg" value=""></div>
+                </div>
+            </div>
+            <div id="cart-floatbar">
+                <div class="ui-ceilinglamp-1" style="width: 990px; height: 52px;">
+                    <div class="cart-toolbar" style="width: 990px; height: 50px;">
+                        <div class="toolbar-wrap">
+                            <div class="selected-item-list hide" style="display: none;">
+                            </div>
+                            <div class="options-box">
+                                <div class="select-all">
+                                    <div class="cart-checkbox">
+                                        <input type="checkbox" id="toggle-checkboxes_down" name="toggle-checkboxes"
+                                               class="jdcheckbox checkAll" onclick="checkAll(this)">
+                                        <label class="checked" for="">勾选全部商品</label>
+                                    </div>
+                                    全选
+                                </div>
+                                <div class="operation">
+                                    <a onclick="batchDeleteCartItem()" class="remove-batch">删除选中商品</a>
+                                    <a href="https://cart.itfh.com/cart.action#none" class="follow-batch">移到关注</a>
+                                    <a href="https://cart.itfh.com/cart.action#none" class="cleaner-opt J_clr_all"
+                                       title="亲，点我可快速清理购物车商品哦！">清理购物车</a>
+                                </div>
+                                <div class="clr"></div>
+                                <div class="toolbar-right toolbar-right-new">
+                                    <div class="normal">
+                                        <div class="comm-right">
+                                            <div class="btn-area">
+                                                <a href="order.html"
+                                                   class="submit-btn">
+                                                    去结算<b></b></a>
+                                            </div>
+                                            <div class="price-sum">
+                                                <div>
+                                                    <span class="txt txt-new">总价：</span>
+                                                    <span class="price sumPrice">
+										<em id="totalPrice">¥0.00</em>
+									</span>
+                                                    <b class="ml5 price-tips"></b>
+                                                </div>
+                                            </div>
+                                            <div class="amount-sum">
+                                                已选择<em id="totalCount">0</em>件商品
+                                            </div>
+                                            <div class="clr"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-removed">
+                <div class="r-tit">已删除商品，您可以重新购买或加关注：</div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!--定义购物车中的商品模板开始-->
+<div id="cartItemTemplate" style="display:none">
+    <div class="  item-item  item-selected" style="z-index: auto;">
+        <div class="item-form">
+            <div class="cell p-checkbox">
+                <div class="cart-checkbox">
+                    <!-- 满赠 -->
+                    <input type="checkbox" name="checkItem" #checked#
+                           class="jdcheckbox" value="#productId#" onclick="selectedCartItem(this)">
+                    <label for="" class="checked">勾选商品</label>
+                    <span class="line-circle"></span>
+                </div>
+            </div>
+            <div class="cell p-goods">
+                <div class="goods-item">
+                    <div class="p-img">
+                        <a href="#" target="_blank"
+                           class="J_zyyhq_1511114">
+                            <img alt="#productName#" width="80" height="80"
+                                 src="#image#">
+                        </a>
+                    </div>
+                    <div class="item-msg">
+                        <div class="p-name">
+                            <a href="#"
+                               target="_blank">
+                                #productName#
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="cell p-price p-price-new">
+                <p class="plus-switch">
+                    <strong>#price#</strong>
+                </p>
+            </div>
+            <div class="cell p-quantity">
+                <div class="quantity-form">
+                    <a href="javascript:void(0);" onclick="cutCartItemCount(this,'#productId#')" class="decrement">-</a>
+                    <input autocomplete="off" type="text" class="itxt" value="#count#"
+                           minnum="1" onblur="changeTextCount(this,'#productId#')">
+                    <a href="javascript:void(0);" onclick="addCartItemCount(this,'#productId#')" class="increment">+</a>
+                </div>
+            </div>
+            <div class="cell p-sum">
+                <strong>#subtotalPrice#</strong>
+            </div>
+            <div class="cell p-ops">
+                <a class="cart-remove" onclick="deleteCartItem('#productId#')" href="javascript:void(0);">删除</a>
+                <a href="javascript:void(0);" class="cart-follow">移到我的关注</a>
+            </div>
+        </div>
+        <div class="item-line"></div>
+    </div>
+</div>
+<!--定义购物车中的商品模板结束-->
+
+<!-- /main -->
+<div id="service"></div>
+<div id="footer"></div>
+</body>
+<script>
+    function changeTextCount(obj,productId){
+        var num = $(obj).val();
+        //如果商品数量文本框的值是数值
+        if(!isNaN(num)){
+            if(num < 1){
+                alert("商品数量不能小于1");
+                $(obj).val(1);
+            }else{
+                changeCartItemCount(num,productId);
+            }
+        }else{
+            $(obj).val(1);
+            changeCartItemCount(1,productId);
+        }
+    }
+
+    //将购物车的商品数量减1
+    function cutCartItemCount(obj,productId){
+        var num = $(obj).next(":text").val();
+        //如果商品数量文本框的值是数值
+        if(!isNaN(num)){
+            //num = parseInt(num);
+            if(num > 1){
+                $(obj).next(":text").val(num-1);
+                changeCartItemCount(num-1,productId);
+            }
+        }else{
+            $(obj).next(":text").val(1);
+            changeCartItemCount(1,productId);
+        }
+    }
+
+    //将购物车的商品数量加1
+    function addCartItemCount(obj,productId){
+        var num = $(obj).prev(":text").val();
+        //如果商品数量文本框的值是数值
+        if(!isNaN(num)){
+            num = parseInt(num);
+            if(num < 200){
+                $(obj).prev(":text").val(num+1);
+                changeCartItemCount(num+1,productId);
+            }
+        }else{
+            $(obj).prev(":text").val(1);
+            changeCartItemCount(1,productId);
+        }
+    }
+
+
+    function changeCartItemCount(count,productId){
+        //发送ajax请求调用修改购物车中商品数量的API接口
+        $.ajax({
+            url: "http://localhost:8082/cart/changeCartItemCount",
+            data:{productId:productId,count:count},
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    initCart();
+                } else {
+
+                }
+            }
+        });
+    }
+
+
+    function checkAll(obj){
+        //发送ajax请求调用修改购物车中所有商品选中状态的API接口
+        $.ajax({
+            url: "http://localhost:8082/cart/changeAllCartItemCheckedStatus",
+            data:{checked:obj.checked},
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    initCart();
+                } else {
+                }
+            }
+        });
+    }
+
+    function initCart(){
+        //发起一个ajax请求调用获取当前登录会员购物车中的商品的API接口
+        $.ajax({
+            url: "http://localhost:8082/cart/queryCart",
+            dataType: "json",
+            async:false,
+            success: function (result) {
+                if (result.status == 200) {
+                    var cart = result.data;
+                    //先判断购物车中是否有商品
+                    if(cart.cartItemList != null && cart.cartItemList.length > 0){
+                        var cartItemTemplate = $("#cartItemTemplate").html();
+                        var cartItemsHtml = "";
+                        var uncheckedCarItemCount = 0;
+                        for(var i = 0 ; i < cart.cartItemList.length ; i ++){
+                            var cartItem = cart.cartItemList[i];
+                            //如果当前遍历的购物车中的商品是选中状态
+                            if(!cartItem.checked){
+                                uncheckedCarItemCount ++;
+                            }
+                            cartItemsHtml += cartItemTemplate.replace(/#productName#/g,cartItem.productName)
+                                .replace(/#image#/g,cartItem.image)
+                                .replace(/#productId#/g,cartItem.productId)
+                                .replace(/#checked#/g,cartItem.checked?"checked":"")
+                                .replace(/#price#/g,cartItem.price)
+                                .replace(/#count#/g,cartItem.count)
+                                .replace(/#subtotalPrice#/g,cartItem.subtotalPrice);
+                        }
+                        //如果未被选中的商品个数等于0，说明全都选了
+                        $(".checkAll").prop("checked",uncheckedCarItemCount == 0);
+                        $("#cartItemList").html(cartItemsHtml);
+                        $(".number").html(cart.cartItemList.length);
+                        $("#totalCount").html(cart.totalCount);
+                        $("#totalPrice").html("￥" + cart.totalPrice);
+                    }else{
+                        $("#noCartItemDiv").show();
+                        $("#cartTotalCountDiv").hide();
+                        $("#cartDiv").hide();
+                    }
+                } else {
+                }
+            }
+        });
+    }
+
+    function deleteCartItem(productId){
+        $.ajax({
+            url: "http://localhost:8082/cart/deleteCartItem",
+            data:{productId:productId},
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    initCart();
+                } else {
+
+                }
+            }
+        });
+
+    }
+
+    function batchDeleteCartItem(){
+        $.ajax({
+            url: "http://localhost:8082/cart/batchDeleteCartItem",
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    initCart();
+                } else {
+
+                }
+            }
+        });
+    }
+
+    //修改redis中购物车中的商品的选中状态
+    function selectedCartItem(obj){
+        //发送ajax请求调用修改购物车中商品选中状态的API接口
+        $.ajax({
+            url: "http://localhost:8082/cart/changeCartItemCheckedStatus",
+            data:{productId:obj.value},
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    initCart();
+                } else {
+
+                }
+            }
+        });
+    }
+
+</script>
+</html>

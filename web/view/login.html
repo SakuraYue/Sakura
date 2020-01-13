@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>飞狐商城-欢迎登录</title>
+<link rel="icon" href="https://www.itfh.com/favicon.ico">
+<link type="text/css" rel="stylesheet" href="css/login.css">
+<script src="/js/jquery-3.3.1.js"></script>
+<script src="/js/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/jquery.cookie.min.js"></script>
+<script src="/js/bootbox/bootbox.min.js"></script>
+<script src="/js/bootbox/bootbox.locales.min.js"></script>
+<script>
+    function login() {
+        var v_memberName = $("#loginname").val();
+        var v_passWord = $("#nloginpwd").val();
+        $.ajax({
+            type:"post",
+            url:"http://localhost:8082/member/login",
+            data:{"name":v_memberName,"password":v_passWord},
+            success:function (result) {
+                if (result.status == 200) {
+                    // 将信息临时存入localstorage
+                    window.localStorage.setItem("token",result.data);
+                    // 跳转到首页
+                    location.href = "/view/index-2.html";
+                } else {
+                    alert(result.msg);
+                }
+            }
+        })
+    }
+</script>
+
+
+<body>
+<div class="w">
+    <div id="logo">
+        <a href="https://www.itfh.com/">
+            <img src="images/logo.png" alt="飞狐商城" width="170" height="60">
+        </a> 
+        <b></b>
+    </div>
+</div>
+<div id="content">
+    <div class="tips-wrapper">
+        <div class="tips-inner">
+            <div class="cont-wrapper"><i class="icon-tips"></i>
+                <p>依据《网络安全法》，为保障您的账户安全和正常使用，请尽快完成手机号验证！ 新版<a href="#" class="black"
+                                                             target="_blank">《飞狐商城隐私政策》</a>已上线，将更有利于保护您的个人隐私。
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="login-wrap">
+        <div class="w">
+            <div class="login-form">
+                <div class="tips-wrapper">
+                    <div class="tips-inner">
+                        <div class="cont-wrapper"><i class="icon-tips"></i>
+                            <p>飞狐商城不会以任何理由要求您转账汇款，谨防诈骗。</p></div>
+                    </div>
+                </div>
+                <div class="login-tab login-tab-l">
+                    <a href="javascript:void(0)" class="checked" style="outline: rgb(109, 109, 109) none 0px;">账户登录</a>
+                </div>
+                <div class="login-box" style="display: block; visibility: visible;">
+                    <div class="mt tab-h">
+                    </div>
+                    <div class="msg-wrap">
+                        <div class="msg-error hide"><b></b></div>
+                    </div>
+                    <div class="mc">
+                        <div class="form">
+                            <form id="formlogin" method="post" onsubmit="return false;">
+                                <div class="item item-fore1">
+                                    <label for="loginname" class="login-label name-label"></label>
+                                    <input id="loginname" type="text" class="itxt" name="loginname" tabindex="1"
+                                           autocomplete="off" value="" placeholder="邮箱/用户名/登录手机">
+                                    <span class="clear-btn"></span>
+                                </div>
+
+                                <div id="entry" class="item item-fore2" style="visibility: visible;">
+                                    <label class="login-label pwd-label" for="nloginpwd"></label>
+                                    <input type="password" id="nloginpwd" name="nloginpwd" class="itxt itxt-error"
+                                           tabindex="2" autocomplete="off" placeholder="密码">
+                                    <span class="clear-btn"></span>
+                                    <span class="capslock" style="display: none;"><b></b>大小写锁定已打开</span>
+                                </div>
+
+
+                                <div id="o-authcode" class="item item-vcode item-fore3">
+                                    <input id="authcode" type="text" class="itxt itxt02" name="authcode" tabindex="3">
+                                    <img id="JD_Verification1" class="verify-code">
+                                    <a href="javascript:void(0)">看不清换一张</a>
+                                </div>
+
+                                <div class="item item-fore4">
+                                    <div class="safe">
+                                        <span></span>
+                                        <span class="forget-pw-safe">
+                                                    <a href="#" class="" target="_blank">忘记密码</a>
+                                                </span>
+                                    </div>
+                                </div>
+
+                                <div class="item item-fore5">
+                                    <div class="login-btn">
+                                        <a href="javascript:;" class="btn-img btn-entry" id="loginsubmit" tabindex="6" onclick="login()">登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="coagent" id="kbCoagent">
+                    <ul>
+                        <li class="extra-r">
+                            <div>
+                                <div class="regist-link">
+                                    <a href="#" target="_blank"><b></b>立即注册</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="login-banner" style="background:#af000e">
+            <div class="w">
+                <div id="banner-bg" class="i-inner"
+                     style="background: url(images/aaa.jpg) 0px 0px no-repeat;background-color: #1f0068"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="w">
+    <div id="footer-2013">
+        <div class="links">
+            <a rel="nofollow" target="_blank" href="#">
+                关于我们
+            </a>
+            |
+            <a rel="nofollow" target="_blank" href="#">
+                联系我们
+            </a>
+            |
+            <a rel="nofollow" target="_blank" href="#">
+                人才招聘
+            </a>
+            |
+            <a rel="nofollow" target="_blank" href="#">
+                商家入驻
+            </a>
+            |
+            <a rel="nofollow" target="_blank" href="#">
+                广告服务
+            </a>
+            |
+            <a rel="nofollow" target="_blank" href="#">
+                手机飞狐
+            </a>
+            |
+            <a target="_blank" href="#">
+                友情链接
+            </a>
+            |
+            <a target="_blank" href="#">
+                销售联盟
+            </a>
+            |
+            <a href="#" target="_blank">
+                飞狐社区
+            </a>
+            |
+            <a href="#" target="_blank">
+                飞狐公益
+            </a>
+            |
+            <a target="_blank" href="#">English Site</a>
+        </div>
+        <div class="copyright">
+            Copyright&nbsp;&#169;&nbsp;2017-2019&nbsp;&nbsp;飞狐商城itfh.com&nbsp;版权所有
+        </div>
+    </div>
+</div>
+</body>
+</html>

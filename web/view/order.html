@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)https://trade.jd.com/shopping/order/getOrderInfo.action#none -->
+<html xmlns="http://www.w3.org/1999/xhtml" class=" jd_retina"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+
+    <title>订单结算页 -京东商城</title>
+    <!--结算页面样式-->
+    <link rel="stylesheet" href="css/backpanel.css" charset="utf-8">
+    <link rel="stylesheet" href="css/service.css" charset="utf-8">
+    <style type="text/css">.quark-pw{display:inline-block;width:210px;height:34px;vertical-align:middle;position:relative;} .quark-pw .quark-pw-list{position:absolute;top:0;left:0;width:210px;height:20px;padding:6px 0;line-height:12px;font-size:12px;background:#fff;border:1px solid #c6c6c6;border-radius:2px;} .quark-pw .quark-pw-input{float:left;width:30px;height:20px;padding:0 2px;line-height:20px;background:#fff;border:0 none;text-align:center;font-size:16px;cursor:text;} .quark-pw .quark-pw-input:not(:nth-last-child(-n+2)){border-right:1px solid #c6c6c6;} .quark-pw .quark-pw-input.active{background:url() no-repeat center center;} .quark-pw .quark-pw-input b{position:relative;display:inline-block;width:11px;height:11px;overflow:hidden;} .quark-pw .quark-pw-input b::before{content:'';position:absolute;top:50%;left:50%;width:6px;height:6px;margin-top:-3px;margin-left:-3px;background:#000;border-radius:50%;} .quark-pw .quark-pw-result-input{width:100%;height:32px;border-radius:2px;background:0 0;padding:0;border:1px solid #c6c6c6;outline:none;ime-mode:disabled;} .quark-pw .quark-pw-list .cardwrap{content:'';position:absolute;display:block;top:0;height:30px;border:1px solid #b4daf8;border-radius:2px;visibility:hidden;width:34px;left:0;-webkit-box-shadow:inset 0 2px 2px rgba(0,0,0,.75), 0 0 8px rgba(82,168,236,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);} </style>
+    <script src="js/jquery-3.3.1.js"></script>
+    <link type="text/css" rel="stylesheet" href="css/cart2.css">
+    <link type="text/css" rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="/js/bootstrap/css/bootstrap.min.css">
+    <link rel="icon" href="/js/shop/assets/img/favicon.ico">
+    <script src="/js/common/nav3.js"></script>
+    <script>
+        $(function(){
+            $("#service").load("service.html");
+            $("#footer").load("footer.html");
+        });
+    </script>
+</head>
+<body id="mainframe">
+<div id="navDiv"></div>
+<!--shortcut start-->
+<div id="o-header-2013">
+    <div id="header-2013" style="display:none;"></div>
+</div>
+
+<div class="w w1 header clearfix">
+    <div id="logo-2014">
+        <a href="http://www.jd.com/" class="logo" target="_blank"></a>
+        <a href="#none" class="link2"><b></b>"结算页"</a>
+    </div>
+
+    <div class="stepflex" id="#sflex03">
+        <dl class="first done">
+            <dt class="s-num">1</dt>
+            <dd class="s-text">1.我的购物车<s></s><b></b></dd>
+        </dl>
+        <dl class="normal doing">
+            <dt class="s-num">2</dt>
+            <dd class="s-text">2.填写核对订单信息<s></s><b></b></dd>
+        </dl>
+        <dl class="normal last">
+            <dt class="s-num">3</dt>
+            <dd class="s-text">3.成功提交订单<s></s><b></b></dd>
+        </dl>
+    </div>
+</div>
+<!-- /header -->
+
+<!-- main -->
+<div id="container">
+    <div id="content" class="w">
+        <!-- <div class="m"> -->
+        <div class="orderInfo-tip" id="noCheckedCartItemDiv" style="display: none">
+            <span class="wicon"></span>
+            请先选择要结算的商品!
+            <a class="btn-1 ml10" href="cart.html">去购物车</a>
+        </div>
+        <div class="checkout-tit">
+            <span class="tit-txt">填写并核对订单信息</span>
+        </div>
+        <!--<div class="mc">-->
+        <div class="checkout-steps">
+            <!--  /widget/consignee-step/consignee-step.tpl -->
+            <div class="step-tit">
+                <h3>收货人信息</h3>
+                <div class="tips-new-white hide" id="tariffTip"><b></b><span>目的国/地区如产生关税及其它相关费用，需用户自行承担</span></div>
+                <div class="tips-new-white hide" id="hkTip"><b></b><span>收货地址为住宅时，需向配送员支付住宅附加费：20港币/单</span></div>
+                <div class="extra-r">
+                    <a href="#none" class="ftx-05 J_consignee_global" onclick="use_NewConsigneeOversea()">新增收货地址</a>
+                    <!--<a href="#none" class="ftx-05" onclick="use_NewConsignee()" clstag="pageclick|keycount|trade_201602181|3">新增收货地址</a>-->
+                    <input type="hidden" id="del_consignee_type" value="0">
+                </div>
+            </div>
+            <div class="step-cont">
+                <div id="consignee-addr" class="consignee-content">
+                    <div class="ui-scrollbar-wrap" style="position: relative; overflow: hidden; width: 938px; height: 42px; z-index: 10;"><div class="consignee-scrollbar" style="left: 0px; top: 0px; overflow: hidden;">
+                        <div class="ui-scrollbar-main">
+                            <div class="consignee-scroll">
+                                <div class="consignee-cont consignee-off" id="consignee1" style="height: 42px;">
+                                    <ul id="consignee-list">
+
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" style="display: list-item;" id="consignee_index_1904881088" selected="selected" c_li_custom_label="consignee_li">
+                                            <div class="consignee-item item-selected" longitude="113.538927" gclng="113.56469" latitude="34.805027" gclat="34.805052" consigneeid="1904881088" provinceid="7" cityid="412" countyid="47301" townid="0" idcard="" id="consignee_index_div_1904881088" consigneetype="0" clstag="pageclick|keycount|trade_201602181|1" c_div_custom_label="consignee_div">
+                                                <span limit="8" title="李川">李川</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span class="addr-name" limit="6" title="李川">李川</span>
+                                                <span class="addr-info" limit="45" title="河南 郑州市 高新技术开发区  玉兰街河南思维-南门">河南 郑州市 高新技术开发区  玉兰街河南思维-南门</span>
+                                                <span class="addr-tel">181****1273</span>
+                                                <span class="addr-default">默认地址</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="1904881088" isoldaddress="false">
+                                                <span></span>				<a href="#none" class="ftx-05 edit-consignee" fid="1904881088" clstag="pageclick|keycount|trade_201602181|6">编辑</a>
+                                                <a href="#none" class="ftx-05 del-consignee hide" fid="1904881088" clstag="pageclick|keycount|trade_201602181|5">删除</a>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div><div class="ui-scrollbar-bg" style="position: absolute; left: 927px; top: auto; width: 11px; z-index: 11; height: 168px; display: none;"></div><div class="ui-scrollbar-item-consignee" style="position: absolute; left: 927px; top: 0px; width: 9px; z-index: 12; height: 39px; display: none;"></div></div>
+                </div>
+
+            </div>
+            <!--/ /widget/consignee-step/consignee-step.tpl -->
+            <div class="hr"></div>
+            <!--/ /widget/shopping-list/shopping-list.tpl -->
+            <div id="shipAndSkuInfo">
+                <div id="payShipAndSkuInfo">
+                    <div class="step-tit">
+                        <h3>支付方式</h3>
+                    </div>
+                    <div class="step-cont">
+                        <div class="payment-list">
+                            <div class="list-cont">
+                                <ul id="payment-list">
+                                    <input type="hidden" id="instalmentPlan" value="false">
+
+                                    <!-- 是否限制该支付方式 -->
+                                    <li style="cursor: pointer;" onclick="
+									 save_Pay(1,0,1);" clstag="pageclick|keycount|trade_201602181|8">
+
+                                        <div class=" payment-item  online-payment " for="pay-method-1" payname="货到付款"
+                                             payid="1" onlinepaytype="0"><b></b>
+                                            货到付款
+                                        </div>
+                                    </li>
+
+                                    <!-- 是否限制该支付方式 -->
+                                    <li style="cursor: pointer;" onclick="
+				save_Pay(4,0,1);" clstag="pageclick|keycount|trade_201602181|7">
+
+                                        <div class=" payment-item item-selected online-payment " for="pay-method-4"
+                                             payname="在线支付" payid="4" onlinepaytype="0"><b></b>
+                                            <em class="payment-promo">惠</em>
+                                            在线支付
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr"></div>
+                    <!--/ /widget/payment-step/payment-step.tpl -->
+                    <div class="step-cont" id="skuPayAndShipment-cont">
+                        <!--添加商品清单  zhuqingjie -->
+                        <div class="shopping-lists" id="shopping-lists">
+                            <!--定义大商品清单LIST-->
+                            <div class="hide" id="skuDetailInfo" notonemainsku="false"></div>
+                            <div class="shopping-list ABTest">
+                                <div class="goods-list">
+                                    <div class="goods-items">
+                                    </div>
+                                </div><!--goods-list 结束-->
+                                <div class="dis-modes" id="11">
+                                </div><!--dis-modes 结束-->
+                                <div class="clr"></div>
+                            </div><!--shopping-list 结束-->
+                            <div class="clr"></div>
+                        </div>
+                        <!--shopping-lists 结束-->
+                    </div>
+                </div>
+            </div>
+            <!--添加商品清单结束-->
+            <!--添加备注信息-->
+            <div class="order-remarks hide" id="orderRemarkItem">
+            </div>
+            <!--  /widget/invoice-step/invoice-step.tpl -->
+            <div class="hr"></div>
+            <!--/  /widget/order-coupon/order-coupon.tpl -->
+        </div>
+        <!--  /widget/order-summary/order-summary.tpl -->
+        <div class="order-summary">
+            <!--  预售 计算支付展现方式 begin -->
+            <div class="statistic fr mt20">
+                <div class="list">
+                    <span><em class="ftx-01" id="totalCount">0</em> 件商品，总商品金额：</span>
+                    <em class="price totalPrice">￥0.00</em>
+                </div>
+            </div>
+            <div class="clr"></div>
+        </div>
+        <!--/ /widget/order-summary/order-summary.tpl -->
+        <!--  /widget/checkout-floatbar/checkout-floatbar.tpl -->
+        <div class="trade-foot">
+            <div id="plusInfoByFreight" class="hide"></div>
+            <div id="plusInfo" class="hide"></div>
+            <div class="trade-foot-detail-com">
+                <div class="fc-price-info">
+                    <span class="price-tit">应付总额：</span>
+                    <span class="price-num totalPrice">￥0.00</span>
+                </div>
+                <div class="fc-consignee-info">
+                    <span class="mr20" id="sendAddr">寄送至： 河南 郑州市 高新技术开发区   玉兰街河南思维-南门</span>
+                    <span id="sendMobile">收货人：李川 181****1273</span>
+                </div>
+            </div>
+
+            <div id="checkout-floatbar" class="group">
+                <div class="ui-ceilinglamp checkout-buttons">
+                    <div class="sticky-placeholder hide" style="display: none;">
+                    </div>
+                    <div class="sticky-wrap">
+                        <div class="inner">
+                            <button type="submit" class="checkout-submit" id="order-submit"
+                                    onclick="javascript:submitOrder();">
+                                提交订单<b></b>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /main -->
+<div id="service"></div>
+<div id="footer"></div>
+
+<div id="cartItemTemplate" style="display: none">
+    <div class="goods-item goods-item-extra">
+        <div class="p-img">
+            <a target="_blank" href="#"><img src="#image#" alt=""></a>
+        </div>
+        <div class="goods-msg">
+            <div class="goods-msg-gel">
+                <div class="p-name">
+                    <a href="#" target="_blank">#productName#</a>
+                </div>
+                <div class="p-price ">
+                    <strong class="jd-price">#subtotalPrice#<em class=""></em></strong>
+                    <span class="p-num">x#count#</span>
+                </div>
+            </div>
+        </div>
+        <div class="clr"></div>
+    </div>
+</div>
+</body>
+<script>
+    var mtoken;
+    $(function () {
+        $.ajax({
+            url: "http://localhost:8082/snowflake/getId",
+            dataType: "json",
+            async:false,
+            success: function (result) {
+                if (result.status == 200) {
+                    mtoken = result.data;
+                }
+            }
+        });
+
+        initCart();
+    })
+    function submitOrder(){
+        //发起一个ajax请求调用创建订单信息的API接口
+        $.ajax({
+            url: "http://localhost:8082/order/addOrder",
+            dataType: "json",
+            beforeSend:function(){
+                xhr.setRequestHeader("token", v_token);
+            },
+            success: function (result) {
+                if (result.status == 200) {
+                    if(result.data != null && result.data.length > 0){
+                        var shortOfStockCartItemStr = "";
+                        for(var i = 0 ; i < result.data.length ; i ++){
+                            var cartItem = result.data[i];
+                            shortOfStockCartItemStr += cartItem.productName + "库存不足\n";
+                        }
+                        alert(shortOfStockCartItemStr);
+                        location.href = "pay.html";
+                    }else{
+                        location.href = "pay.html";
+                    }
+                } else if(result.status == 1000){
+                    alert("购物车中所有选中的商品全都卖完了，提交订单失败！");
+                }
+            }
+        });
+    }
+    function initCart(){
+        //发起一个ajax请求调用获取当前登录会员购物车中选中的商品的API接口
+        $.ajax({
+            url: "http://localhost:8082/cart/queryCheckedCart",
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    var cart = result.data;
+                    //先判断购物车中是否有商品
+                    if(cart.cartItemList != null && cart.cartItemList.length > 0){
+                        var cartItemTemplate = $("#cartItemTemplate").html();
+                        var cartItemsHtml = "";
+                        for(var i = 0 ; i < cart.cartItemList.length ; i ++){
+                            var cartItem = cart.cartItemList[i];
+                            cartItemsHtml += cartItemTemplate.replace(/#productName#/g,cartItem.productName)
+                                .replace(/#image#/g,cartItem.image)
+                                .replace(/#count#/g,cartItem.count)
+                                .replace(/#subtotalPrice#/g,cartItem.subtotalPrice);
+                        }
+                        $(".goods-items").html(cartItemsHtml);
+                        $("#totalCount").html(cart.totalCount);
+                        $(".totalPrice").html("￥" + cart.totalPrice);
+                    }else{
+                        // $("#noCheckedCartItemDiv").show();
+                        //跳转到购物车页面
+                        location.href = "cart.html";
+                    }
+                } else {
+                }
+            }
+        });
+    }
+</script>
+</html>

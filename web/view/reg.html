@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="/js/bootstrap/css/bootstrap.min.css">
+    <title>会员注册</title>
+</head>
+<body>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label  class="col-sm-2 control-label">用户名</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="userName" placeholder="请输入用户名..." >
+            <span id="userNameTip"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-sm-2 control-label">密码</label>
+        <div class="col-sm-4">
+            <input type="password" class="form-control" id="userPwd" placeholder="请输入密码...">
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-sm-2 control-label">确认密码</label>
+        <div class="col-sm-4">
+            <input type="password" class="form-control" id="userConfirmPwd" placeholder="请再次输入密码...">
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">手机号</label>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" class="form-control" id="phone" placeholder="请输入手机号...">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="button" onclick="sendCode();" id="codeButton">发送验证码</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">验证码</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="code" placeholder="请输入手机短信验证码...">
+        </div>
+    </div>
+
+
+
+    <div style="text-align: center;">
+        <button type="button" class="btn btn-primary" onclick="regMember();" id="saveUserButton" ><span class="glyphicon glyphicon-search" aria-hidden="true"></span>注册会员</button>
+        <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>重置</button>
+    </div>
+</form>
+<script src="/js/jquery-3.3.1.js"></script>
+<script src="/js/bootstrap/js/bootstrap.min.js"></script>
+
+<script>
+
+    function sendCode() {
+        var v_phone = $("#phone").val();
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8083/sms/sendMsg?phone="+v_phone,
+            success:function (result) {
+                if (result.code == 200) {
+                    alert("发送成功");
+                } else {
+                    alert(result.msg);
+                }
+            }
+        })
+    }
+    
+    
+    function regMember() {
+
+        var v_userName = $("#userName").val();
+        var v_userPwd = $("#userPwd").val();
+
+        var v_phone = $("#phone").val();
+        var v_code = $("#code").val();
+
+        var param = {};
+        param.memberName = v_userName;
+        param.passWord = v_userPwd;
+        param.phone = v_phone;
+        param.smsCode = v_code;
+
+        $.ajax({
+            type:"post",
+            url:"http://localhost:8083/member/register",
+            data:param,
+            success:function (result) {
+                if (result.status == 200) {
+                    alert("注册成功");
+                    location.href="/view/index-student.html"
+                } else {
+                    alert("失败:"+result.msg);
+                }
+            }
+        })
+
+
+    }
+    
+
+</script>
+
+</body>
+</html>

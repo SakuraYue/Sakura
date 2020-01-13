@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <link rel="stylesheet" href="/js/bootstrap/css/bootstrap.min.css">
+    <link rel="icon" href="/js/shop/assets/img/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/js/shop/css/webbase.css" />
+    <link rel="stylesheet" type="text/css" href="/js/shop/css/pages-JD-index.css" />
+    <link rel="stylesheet" type="text/css" href="/js/shop/css/widget-jquery.autocomplete.css" />
+    <link rel="stylesheet" type="text/css" href="/js/shop/css/widget-cartPanelView.css" />
+
+    <script src="/js/jquery-3.3.1.js"></script>
+    <script src="/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.cookie.min.js"></script>
+    <script src="/js/bootbox/bootbox.min.js"></script>
+    <script src="/js/bootbox/bootbox.locales.min.js"></script>
+    <script src="/js/common/nav3.js"></script>
+    <title>商城首页</title>
+    <style>
+        .SortList {
+            height: 200px;
+        }
+        .sort .all-sort-list2 {
+            min-height: 200px;
+        }
+    </style>
+
+
+</head>
+<body>
+<div id="navDiv"></div>
+<div id="nav-bottom">
+    <!--顶部-->
+    <div class="nav-top">
+        <!--头部-->
+        <div class="header">
+            <div class="py-container">
+                <div class="yui3-g ">
+                    <div class="yui3-u Left all-sort">
+                        <h4>全部商品分类</h4>
+                    </div>
+                    <div class="yui3-u Center navArea">
+                        <ul class="nav">
+                            <li class="f-item">服装城</li>
+                            <li class="f-item">美妆馆</li>
+                            <li class="f-item">品优超市</li>
+                            <li class="f-item">全球购</li>
+                            <li class="f-item">闪购</li>
+                            <li class="f-item">团购</li>
+                            <li class="f-item">有趣</li>
+                        </ul>
+                    </div>
+                    <button onclick="location.href='cart.html'" type="button" class="btn btn-primary btn-sm" style="background:#c81623;color:#fff">
+                            <span class="glyphicon glyphicon-shopping-cart"><span>
+                            <span id="cartTotalCount">0</span>
+                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--列表-->
+<div class="sort">
+    <div class="py-container">
+        <div class="yui3-g SortList ">
+            <div class="yui3-u Left all-sort-list">
+                <div class="all-sort-list2" id="categoryDiv">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="row" >
+        <div class="col-md-12">
+            <div class="panel panel-success">
+                <div class="panel-heading">商品列表</div>
+                <div class="panel-body" id="productListDiv">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" >
+        <div class="col-md-12">
+            <div class="panel panel-success">
+                <div class="panel-heading">热销品牌</div>
+                <div class="panel-body" id="brandListDiv">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div id="productDiv" style="display: none;">
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <img src="##mainImage##">
+            <div class="caption">
+                <h3>商品名:##produtName##</h3>
+                <p><b><font color="red">价格:##price##</font></b></p>
+                <p><a href="#" class="btn btn-primary" role="button" onclick="buyCart('##id##')">加入购物车</a> <a href="#" class="btn btn-default" role="button">收藏</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="brandDiv" style="display: none;">
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <img src="##image##">
+            <div class="caption">
+                <h3>品牌名:##name##</h3>
+                <p><a href="#" class="btn btn-primary" role="button" onclick="buy('##id##','1','1')">查看品牌</a> <a href="#" class="btn btn-default" role="button">收藏品牌</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(function () {
+
+initCategory();
+initProductList();
+initBrandList();
+initCartTotalNumber();
+
+})
+
+function initCartTotalNumber(){
+    $.ajax({
+        url: "http://localhost:8082/cart/getCartTotalCount",
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 200) {
+                $("#cartTotalCount").html(result.data);
+            } else {
+            }
+        }
+    });
+}
+
+function initProductList(){
+$.post(
+"http://localhost:8082/product/queryList",
+"json",
+function (data) {
+if(data.status==200){
+var productList =data.data;
+for (var i = 0; i < productList.length; i++) {
+var product = productList[i];
+var productTemp=$("#productDiv").html();
+var  productHtml=  productTemp.replace(/##mainImage##/g,product.mainImage)
+.replace(/##produtName##/g,product.name)
+.replace(/##price##/g,product.price)
+.replace(/##id##/g,product.id);
+$("#productListDiv").append(productHtml);
+}
+}
+}
+)
+}
+function initBrandList(){
+$.post(
+"http://localhost:8082/brand/queryList",
+function (data) {
+if(data.status==200){
+var brandList =data.data;
+for (var i = 0; i < brandList.length; i++) {
+var brand = brandList[i];
+var brandTemp=$("#brandDiv").html();
+var  brandtHtml=  brandTemp.replace(/##image##/g,brand.logo)
+.replace(/##name##/g,brand.name)
+$("#brandListDiv").append(brandtHtml);
+}
+}
+}
+)
+}
+function initCss() {
+$('.all-sort-list2 > .item').hover(function() {
+//父类分类列表容器的高度
+$(this).addClass('hover');
+$(this).children('.item-list').css('display', 'block');
+}, function() {
+$(this).removeClass('hover');
+$(this).children('.item-list').css('display', 'none');
+});
+
+$('.item > .item-list > .close').click(function() {
+$(this).parent().parent().removeClass('hover');
+$(this).parent().hide();
+});
+}
+var str="";
+var categoryList =[];
+function initCategory(){
+$.post(
+"http://localhost:8082/category/queryCategoryList",
+function (data) {
+if(data.status==200){
+categoryList = data.data;
+for (var i = 0; i < categoryList.length; i++) {
+var category = categoryList[i];
+if(category.pid==0){
+str +='   <div class="item">' +
+    '     <h3><a href="">'+category.name+'</a></h3> '
+    bulidChild(category.id);
+    str +=  '</div>';
+}
+}
+$("#categoryDiv").html(str);
+initCss();
+}
+}
+)
+
+}
+function bulidChild(pid){
+str +='   <div class="item-list clearfix">' +
+    '<div class="subitem">';
+        for (var i = 0; i < categoryList.length; i++) {
+        if(categoryList[i].pid==pid){
+        str +='<dl class="fore1">' +
+            '<dt><a href="">'+categoryList[i].name+'</a></dt>' ;
+            buildChildChild(categoryList[i].id);
+            str +=   '</dl>';
+        }
+        }
+        str +='</div></div>';
+}
+function buildChildChild(pid){
+str +=' <dd>';
+    for (var i = 0; i < categoryList.length; i++) {
+    if(categoryList[i].pid==pid){
+    str +='<em><a href="">'+categoryList[i].name+'</a></em>'
+    }
+    }
+    str +=' </dd>';
+}
+</script>
+</body>
+</html>

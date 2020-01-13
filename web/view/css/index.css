@@ -1,0 +1,47 @@
+.product-info{
+    height:300px;
+    margin-bottom:10px;
+}
+
+.product-container{
+    border:1px solid #999;
+    width:100%;
+    padding:5px;
+}
+
+.product-image{
+    width:150px;
+    height:150px;
+}
+
+.product-name{
+    font-size:14px;
+    color:#666;
+    height:48px;
+    line-height:24px;
+    word-break:break-all;
+    overflow:hidden;
+    text-overflow:ellipsis
+}
+
+.product-price{
+    display:inline-block;
+    font-size: 16px;
+    line-height:18px;
+    height:18px;
+    color:#e1251b
+}
+
+.product-price span{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.product-operation{
+    margin-top:10px;
+    margin-bottom:10px
+}
+
+.product-operation button{
+    background:#e1251b;
+}
