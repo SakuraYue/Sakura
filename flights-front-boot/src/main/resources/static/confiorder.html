@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/common.js"></script>
+</head>
+<body>
+<b>航班信息</b><br>
+航班:<span id="flight"></span><br>
+起飞时间:<span id="starttime"></span><br>
+到达时间:<span id="endtime"></span><br>
+<b>乘机人</b><br>
+票型:<span id="type"></span>,票价<span id="price"></span>,乘机人:<span id="user"></span>,身份证:<span id="idcart"></span><br>
+<b>总人数:1,总票价:￥<span id="subprice"></span></b><br>
+<input type="button" value="去付款" onclick="subOrder()">
+</body>
+<script>
+    $(function () {
+        $.ajax({
+            url: "http://localhost:8035/queryFlightLists",
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    var flightlist=result.data;
+                    for (var i=0;i<flightlist.length;i++){
+                        $("#flight").html(flightlist[i].name)
+                        $("#starttime").html(flightlist[i].startIime)
+                        $("#endtime").html(flightlist[i].endTime)
+                    }
+
+                }
+            }
+        });
+        getOrderByUserId();
+    })
+    function getOrderByUserId() {
+        $.ajax({
+            url: "http://localhost:8035/getOrderByUserId",
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    var orderitem=result.data;
+                    if (orderitem.tickettype==1){
+                        $("#type").html("商务舱")
+                    }else{
+                        $("#type").html("经济舱")
+                    }
+                    $("#price").html(orderitem.price)
+                    $("#user").html(orderitem.realname)
+                    $("#idcart").html(orderitem.idcard)
+                    $("#subprice").html(orderitem.price)
+
+                }
+            }
+        });
+    }
+    function subOrder() {
+        $.ajax({
+            url: "http://localhost:8035/createNative",
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    var flightlist=result.data;
+                    location.href="pay.html";
+                }
+            }
+        });
+    }
+</script>
+</html>

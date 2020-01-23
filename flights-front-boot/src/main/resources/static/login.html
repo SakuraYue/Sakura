@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<div style="margin-top:200px;margin-left:700px;">
+    用户名:<input id="name"><br>
+    密码:&nbsp;&nbsp;&nbsp;<input id="password"><br>
+    <button type="button" onclick="login()" class="btn btn-info ">
+        <i class=""></i>&nbsp;登录
+    </button>
+    <button type="button" class="btn btn-info ">
+        <i class=""></i>&nbsp;<a href="regirest.html">注册</a>
+    </button>
+</div>
+</body>
+<script>
+    $(function(){
+        window.onkeydown = function(event){
+            if(event.keyCode == 13){
+                login();
+            }
+        }
+    });
+    function login() {
+        var memberName = $("#name").val().trim();
+        var passWord = $("#password").val().trim();
+        if (memberName == ""){
+            alert("用户名不能为空");
+            return;
+        }
+        if (passWord == ""){
+            alert("密码不能为空");
+            return;
+        }
+
+        $.ajax({
+            type:"post",
+            url:"http://localhost:8035/login",
+            data:{
+                "usrpassword":passWord,
+                "username":memberName,
+                "email":memberName,
+                "phonenumber":memberName
+            },
+            success:function (result) {
+                if (result.status == 200) {
+                    localStorage.setItem("token",result.data);
+                    location.href="list.html";
+                } else {
+                    alert(result.msg);
+                }
+            }
+        })
+    }
+</script>
+</html>

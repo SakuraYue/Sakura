@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+	例如namespace="com.szh.mapper.personMapper"就是com.szh.mapper(包名)+personMapper(personMapper.xml文件去除后缀) -->
+<mapper namespace="com.fh.mapper.FlightOrderItemMapper">
+
+    <select id="getOrderByMemberId" parameterType="Integer" resultType="com.fh.model.FlightOrder">
+      select * from t_flightorder where userid = #{id}
+    </select>
+    <insert id="addorderItem" parameterType="com.fh.model.FlightOrderItem">
+        insert into t_flightorderitem (userid,orderid,ticketid,tickettype,price,realname,idcard)
+        values (#{userid},#{orderid},#{ticketid},#{tickettype},#{price},#{realname},#{idcard})
+    </insert>
+    <select id="getOrderByUserId" resultType="com.fh.model.FlightOrderItem" parameterType="Integer">
+        select * from t_flightorderitem where userid=#{id}
+    </select>
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fh.mapper.FilghtMapper">
+    <select id="queryFlightList" resultMap="MapList" parameterType="com.fh.model.QueryObject">
+        select f.*,sum(t.totalCount) 'count',
+        (SELECT t1.price from t_flight f1 left join t_ticket t1 on t1.flightId=f1.id where t1.type=2 ) 'tprice',
+        CONCAT(ifnull(f.name,""),if(p.name is null,'',''),ifnull(p.name,""),if(p.type is null,'','('),ifnull(p.type,""),if(p.type is null,'',')')) fname,
+        CONCAT(f.startIime,if(a2.name is null,'',''),ifnull(a2.name,""),if(a3.name is null,'',''),ifnull(a3.name,"")) startarea
+         ,CONCAT(f.endTime,if(a4.name is null,'',''),ifnull(a5.name,""),if(a6.name is null,'',''),ifnull(a6.name,"")) endarea
+         from t_flight f left join t_plane p on p.id = f.typeId
+         left join t_ticket t on t.flightId=f.id
+         LEFT JOIN t_area a1 on f.startCityId=a1.id
+        LEFT JOIN t_area a2 on f.startAirportId=a2.id
+        LEFT JOIN t_area a3 on f.startTerminalId=a3.id
+        LEFT JOIN t_area a4 on f.endCityId=a4.id
+        LEFT JOIN t_area a5 on f.endAirportId=a5.id
+        LEFT JOIN t_area a6 on f.endTerminalId=a6.id
+
+        limit #{start},#{length}
+    </select>
+    <select id="queryCount" resultType="Integer" parameterType="com.fh.model.QueryObject">
+        select count(*) from t_flight
+    </select>
+    <select id="queryFlightLists" resultType="com.fh.model.Flight" parameterType="com.fh.model.Flight">
+        select f.*,sum(t.totalCount) 'count',
+        (SELECT t1.price from t_flight f1 left join t_ticket t1 on t1.flightId=f1.id where t1.type=2 ) 'tprice',
+        CONCAT(ifnull(f.name,""),if(p.name is null,'',''),ifnull(p.name,""),if(p.type is null,'','('),ifnull(p.type,""),if(p.type is null,'',')')) fname,
+        CONCAT(f.startIime,if(a2.name is null,'',''),ifnull(a2.name,""),if(a3.name is null,'',''),ifnull(a3.name,"")) startarea
+         ,CONCAT(f.endTime,if(a4.name is null,'',''),ifnull(a5.name,""),if(a6.name is null,'',''),ifnull(a6.name,"")) endarea
+         from t_flight f left join t_plane p on p.id = f.typeId
+         left join t_ticket t on t.flightId=f.id
+         LEFT JOIN t_area a1 on f.startCityId=a1.id
+        LEFT JOIN t_area a2 on f.startAirportId=a2.id
+        LEFT JOIN t_area a3 on f.startTerminalId=a3.id
+        LEFT JOIN t_area a4 on f.endCityId=a4.id
+        LEFT JOIN t_area a5 on f.endAirportId=a5.id
+        LEFT JOIN t_area a6 on f.endTerminalId=a6.id
+    </select>
+
+    <resultMap id="MapList" type="Map">
+        <result property="id" column="id"></result>
+        <result property="name" column="name"></result>
+        <result property="startIime" column="startIime"></result>
+        <result property="endTime" column="endTime"></result>
+    </resultMap>
+    <!--<sql id="sqlwhere">
+        <where>
+            <if test="name != null and name != ''">
+                and e.name like concat('%',#{name},'%')
+            </if>
+            <if test="entryYear != null">
+            <if test="entryYear == 1">
+                <![CDATA[
+                and TIMESTAMPDIFF(YEAR,e.entrytime,sysdate()) < 1
+            ]]>
+            </if>
+                <if test="entryYear == 2">
+                    <![CDATA[
+                and TIMESTAMPDIFF(YEAR,e.entrytime,sysdate()) >= 3
+            ]]>
+                </if>
+                <if test="entryYear == 3">
+                    <![CDATA[
+                and TIMESTAMPDIFF(YEAR,e.entrytime,sysdate()) >= 5
+            ]]>
+                </if>
+                <if test="entryYear == 4">
+                    <![CDATA[
+                and TIMESTAMPDIFF(YEAR,e.entrytime,sysdate()) >= 10
+            ]]>
+                </if>
+            </if>
+            <if test="isLeader != null">
+                <if test="isLeader == 1">
+                    and e2.isLeader = 1
+                </if>
+                <if test="isLeader == 0">
+                    and e2.isLeader = 0
+                </if>
+            </if>
+        </where>
+    </sql>-->
+
+
+
+</mapper>

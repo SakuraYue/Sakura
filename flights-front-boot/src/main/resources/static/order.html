@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/common.js"></script>
+<body>
+<form>
+    票型:<select id="type" onchange='changeProduct1(this)'>
+            <option value=1>商务舱</option>
+            <option value=2>经济舱</option>
+        </select>
+    价格:<input id="price" value="" readonly="readonly">
+    乘机人:<input id="username">
+    身份证:<input id="idcart"><br>
+    总人数:<span id="countperpose">1</span>,总票价:￥<span id="subprice"></span><br>
+    <input type="button" value="去结算" onclick="addOrder()">
+</form>
+</body>
+<script>
+    $(function () {
+        $.ajax({
+            url: "http://localhost:8035/queryTicket",
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    var ticketList = result.data;
+                    var ticketType=$("#type").val();
+                    var ticket=parseInt(ticketType);
+                    for (var i = 0; i < ticketList.length; i++) {
+                        if (ticketList[i][i].type == ticket){
+                            $("#price").val(ticketList[i][i].price);
+                            $("#subprice").html(ticketList[i][i].price);
+                        }
+                    }
+                }
+            }
+        });
+    })
+    function changeProduct1(obj){
+        $.ajax({
+            url: "http://localhost:8035/queryTicket",
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    var ticketList = result.data;
+                    var ticketType=obj.value;
+                    var ticket=parseInt(ticketType);
+                    for (var i = 0; i < ticketList.length; i++) {
+                        for (var j = 0; j < ticketList[i].length; j++) {
+                            if (ticketList[i][j].type == ticket){
+                                $("#price").val(ticketList[i][j].price);
+                                $("#subprice").html(ticketList[i][j].price);
+                            }
+                        }
+
+                    }
+                }
+            }
+        });
+    }
+    function addOrder() {
+        var flighttype=$("#type").val();
+        var price=$("#price").val();
+        var username=$("#username").val();
+        var idcart=$("#idcart").val();
+        var countperpose=$("#countperpose").html();
+        var subprice=$("#subprice").html();
+        $.ajax({
+            type: "post",
+            url: "http://localhost:8035/addOrder",
+            data:{
+                flighttype:flighttype,
+                price:price,
+                username:username,
+                idcart:idcart,
+                countperpose:countperpose,
+                subprice:subprice
+            },
+            success: function (result) {
+                if (result.status == 200) {
+                    location.href="confiorder.html";
+                }
+            }
+        })
+    }
+</script>
+</html>

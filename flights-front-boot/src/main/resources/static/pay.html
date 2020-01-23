@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>微信支付</title>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/bootstrap3/js/bootstrap.min.js"></script>
+    <link rel="icon" href="https://www.jd.com/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="js/qrcode.min.js"></script>
+</head>
+
+
+<body>
+<!-- shortcut -->
+        <div class="shortcut">
+    <div class="w">
+        <a class="s-logo" href="https://www.jd.com/" target="_blank" psa="PCashier_jd">
+            <b style="color:#e2231a;font-family:微软雅黑;font-size:30px;line-height:28px">飞狐商城收银台</b>
+        </a>
+        <ul class="s-right">
+            <li class="s-item fore1">
+                <a href="https://home.jd.com/" target="_blank" class="link-user">iteinstein</a>
+            </li>
+            <li class="s-div">|</li>
+            <li class="s-item fore2" psa="PCashier_myOrder">
+                <a class="op-i-ext" href="https://order.jd.com/center/list.action" target="_blank">我的订单</a>
+            </li>
+            <li class="s-div">|</li>
+            <li class="s-item fore3" psa="PCashier_help">
+                <a class="op-i-ext" target="_blank" href="https://help.jd.com/user/issue/list-173-224.html">支付帮助</a>
+            </li>
+            <!--<li class="s-div">|</li>-->
+            <!--<li class="s-item fore4">-->
+            <!--<a class="op-i-ext" target="_blank" href="//survadmin.jd.com/index.php?r=survey/index/sid/757632/lang/zh-Hans" >问题反馈</a>-->
+            <!--</li>-->
+        </ul>
+        <span class="clr"></span>
+    </div>
+</div>
+
+<div class="main">
+    <div class="w">
+        <!-- order 订单信息 -->
+                <div class="order clearfix order-init order-init-oldUser-noQrcode">
+    <!-- 订单信息 -->
+                    <div class="o-left"><h3 class="o-title">订单提交成功，请尽快付款！订单号：<span id="outTradeNo"></span></h3>
+
+        <p class="o-tips">
+
+        </p>
+    </div>
+    <!-- 订单信息 end --><!-- 订单金额 -->
+    <div class="o-right">
+        <div class="o-price"><em>应付金额</em><strong id="totalPrice"></strong><em>元</em></div>
+            </div>
+    <!-- 订单金额 end -->
+    <div class="o-list j_orderList" id="listPayOrderInfo"><!-- 单笔订单 -->
+
+        <!-- 多笔订单 end -->
+    </div>
+</div>
+<!-- order 订单信息 end -->
+
+        <!-- payment 支付方式选择 -->
+        <div class="payment">
+            <!-- 微信支付 -->
+            <div class="pay-weixin">
+                <div class="p-w-hd">微信支付</div>
+                <div class="p-w-bd" style="position:relative">
+                    <div class="j_weixinInfo font-red" style="position:absolute; top: -36px; left: 130px;">二维码将于<span id="timeoutSpan">120</span>秒后过期!</div>
+                    <div class="p-w-box">
+                        <div class="pw-box-hd" id="weixinImageUrl">
+                        </div>
+                        <div class="pw-retry j_weixiRetry" style="display: none;">
+                            <a class="ui-button ui-button-gray j_weixiRetryButton" href="javascript:getWeixinImage2();">获取失败 点击重新获取二维码  </a>
+                        </div>
+                        <div class="pw-box-ft">
+                            <p>请使用微信扫一扫</p>
+                            <p>扫描二维码支付</p>
+                        </div>
+                    </div>
+                    <div class="p-w-sidebar"></div>
+                </div>
+            </div>
+            <!-- 微信支付 end -->
+            <!-- payment-change 变更支付方式 -->
+            <div class="payment-change">
+                <a class="pc-wrap" onclick="window.history.go(-1)">
+                    <i class="pc-w-arrow-left">&lt;</i>
+                    <strong>选择其他支付方式</strong>
+                </a>
+            </div>
+            <!-- payment-change 变更支付方式 end -->
+        </div>
+        <!-- payment 支付方式选择 end -->
+    </div>
+</div>
+<!-- 收银台 footer -->
+            <div class="p-footer">
+    <div class="pf-wrap w">
+        <div class="pf-line">
+            <span class="pf-l-copyright">Copyright © 2004-2019  飞狐fh.com 版权所有</span>
+            <span class="ml40">由网银在线（北京）科技有限公司提供技术支持</span>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        //发起一个ajax请求调用生成微信预支付交易单的API接口
+        $.ajax({
+            url: "http://localhost:8035/createNative",
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    $("#outTradeNo").html(result.data.outTradeNo);
+                    $("#totalPrice").html(result.data.totalPrice);
+                    /*//设置二维码过期时间
+                    timeoutTimer = setInterval(function(){
+                        var timeout = parseInt($("#timeoutSpan").html());
+                        if(timeout == 0){
+                            clearInterval(timeoutTimer);
+                            clearTimeout(queryPayStatusTimer);
+                        }else{
+                            $("#timeoutSpan").html(timeout-1)
+                        }
+                    },1000);
+                    //轮询查询支付状态
+                    queryPayStatus();*/
+                    new QRCode(document.getElementById("weixinImageUrl"),result.data.codeUrl);
+                    timeoutTimer = setInterval(function(){
+                        var timeout = parseInt($("#timeoutSpan").html());
+                        if(timeout == 0){
+                            clearInterval(timeoutTimer);
+                        }else{
+                            $("#timeoutSpan").html(timeout-1)
+                        }
+                    },1000);
+                    queryPayStatus();
+                } else if(result.status == 123456){
+                    alert("获取支付信息失败，请刷新页面重试！");
+                } else{
+                    alert("亲，好像获取支付信息失败了呢，请联系客服！");
+                }
+            }
+        });
+    });
+    function queryPayStatus(){
+        $.ajax({
+            url: "http://localhost:8035/queryPayStatus",
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 200) {
+                    //获取商户订单号
+                    var outTradeNo = result.data;
+                    //跳转到支付成功页面
+                    location.href = "pay-success.html?outTradeNo=" + outTradeNo;
+                }
+                queryPayStatus();
+            }
+        });
+    }
+</script>
+</body></html>

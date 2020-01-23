@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+	例如namespace="com.szh.mapper.personMapper"就是com.szh.mapper(包名)+personMapper(personMapper.xml文件去除后缀) -->
+<mapper namespace="com.fh.mapper.PaylogMapper">
+
+    <insert id="addPayLog" parameterType="com.fh.model.Paylog">
+        INSERT INTO t_paylog (outTradeNo, orderId, memberId, payMoney, payStatus, payType)
+        VALUES
+        (#{outTradeNo}, #{orderId}, #{memberId},#{payMoney}, #{payStatus}, #{payType})
+    </insert>
+
+    <update id="updatePayLog" parameterType="com.fh.model.Paylog">
+        update t_paylog set payStatus=#{payStatus},transactionId = #{transactionId} where outTradeNo = #{outTradeNo}
+    </update>
+
+    <select id="getPayLogByOutTradeNo" parameterType="String" resultType="com.fh.model.Paylog">
+        select * from t_paylog where outTradeNo = #{abc}
+    </select>
+    <update id="updatePayLog" parameterType="com.fh.model.Paylog">
+        update t_paylog set payTime = #{payTime},payStatus=#{payStatus},transactionId = #{transactionId} where outTradeNo = #{outTradeNo}
+    </update>
+
+    <select id="getPayLogByOutTradeNo" parameterType="String" resultType="com.fh.model.Paylog">
+        select * from t_paylog where outTradeNo = #{abc}
+    </select>
+</mapper>
